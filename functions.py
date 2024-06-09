@@ -30,14 +30,16 @@ def clean_string(s):
     return s
 
 def process_text(text):
-    pattern = r"\[.*\]"
-    match = re.search(pattern, text, re.DOTALL)
-    quest_list = match.group(0).split("\n")
-    clean_quests = []
-    for quest in quest_list:
-        new_string = clean_string(quest)
-        clean_quests.append(new_string)
-
+    try:
+        pattern = r"\[.*\]"
+        match = re.search(pattern, text, re.DOTALL)
+        quest_list = match.group(0).split("\n")
+        clean_quests = []
+        for quest in quest_list:
+            new_string = clean_string(quest)
+            clean_quests.append(new_string)
+    except:
+        return {"Not working":text}
     return clean_quests
 
 def chat_response(model_name, prompt, system_prompt, temp=0.9):
