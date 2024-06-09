@@ -2,6 +2,27 @@ from gpt4all import GPT4All
 from datetime import date
 import os
 import re
+import ollama
+from ollama import Client
+
+def ollama_chat(prompt, model = "llama3"):
+    client = Client(host='http://localhost:11434')
+    response = client.chat(model='llama3', messages=[
+      {
+        'role': 'user',
+        'content': prompt,
+      },
+    ])
+    return response["message"]["content"]
+
+
+def get_ollama_models():
+    list_of_ollama_models = []
+    ollama_models = ollama.list()
+    for num in range(len(ollama_models["models"])):
+        list_of_ollama_models.append(ollama_models["models"][num]["name"][:-7])
+    return list_of_ollama_models
+
 
 def clean_string(s):
     s = re.sub(r"^.*?([A-Z])", r"\1", s)
