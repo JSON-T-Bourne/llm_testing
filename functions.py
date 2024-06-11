@@ -46,7 +46,7 @@ def process_text0(text):
             print(end_matches)
         text = text[end_matches.start(0):]
         text = text[::-1]
-        quest_list = text.split("\n")
+        quest_list = text.split("', '")
         clean_quests = []
         for quest in quest_list:
             new_string = clean_string(quest)
