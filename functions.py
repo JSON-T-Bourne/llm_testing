@@ -32,20 +32,20 @@ def clean_string0(s):
 
 def process_text0(text):
     try:
-        start_pattern = r'\['
-        end_pattern = r'\]'
-        alt_end_pattern = r'\.'
+        start_pattern = r"\["
+        end_pattern = r"\]"
+        alt_end_pattern = r"\'\s\,'"
         
         start_match = re.search(start_pattern, text, re.DOTALL)
         text = text[start_match.start(0):]
         text = text[::-1]
         end_matches = re.search(end_pattern, text, re.DOTALL)
-        print(end_matches)
         if end_matches == None:
             end_matches = re.search(alt_end_pattern, text, re.DOTALL)
             print(end_matches)
         text = text[end_matches.start(0):]
         text = text[::-1]
+        text = text.replace("\n", "")
         quest_list = text.split("', '")
         clean_quests = []
         for quest in quest_list:
