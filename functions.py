@@ -23,7 +23,37 @@ def get_ollama_models():
         list_of_ollama_models.append(ollama_models["models"][num]["name"][:-7])
     return list_of_ollama_models
 
+def clean_string0(s):
+    # Remove everything up to the first capital letter
+    s = re.sub(r'^.*?([A-Z])', r'\1', s)
+    # Remove everything after the last punctuation mark (., !, ?)
+    s = re.sub(r'([.!?]).*$', r'\1', s)
+    return s
 
+def process_text0(text):
+    try:
+        start_pattern = r'\['
+        end_pattern = r'\]'
+        alt_end_pattern = r'\.'
+        
+        start_match = re.search(start_pattern, text, re.DOTALL)
+        text = text[start_match.start(0):]
+        text = text[::-1]
+        end_matches = re.search(end_pattern, text, re.DOTALL)
+        print(end_matches)
+        if end_matches == None:
+            end_matches = re.search(alt_end_pattern, text, re.DOTALL)
+            print(end_matches)
+        text = text[end_matches.start(0):]
+        text = text[::-1]
+        quest_list = text.split("\n")
+        clean_quests = []
+        for quest in quest_list:
+            new_string = clean_string(quest)
+            clean_quests.append(new_string)
+        return clean_quests
+    except:
+        print(text)
 def clean_string(s):
     s = re.sub(r"^.*?([A-Z])", r"\1", s)
     s = re.sub(r"([.!?]).*$", r"\1", s)
@@ -39,7 +69,19 @@ def process_text(text):
             new_string = clean_string(quest)
             clean_quests.append(new_string)
     except:
-        return {"Not working":text}
+
+        start_pattern = r'\['
+        start_match = re.search(start_pattern, text, re.DOTALL)
+        end_pattern = r'[\]\n]'
+        end_matches = re.search(end_pattern, text, re.DOTALL)
+        text = text[start_match.start():end_matches.start()]
+        quest_list = text.split(",")
+        clean_quests = []
+        for quest in quest_list:
+            new_string = clean_string(quest)
+            clean_quests.append(new_string)
+        return clean_quests
+
     return clean_quests
 
 def chat_response(model_name, prompt, system_prompt, temp=0.9):
